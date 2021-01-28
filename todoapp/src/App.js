@@ -10,21 +10,21 @@ function App() {
   const [userName, setUserName] = useState(undefined);
 
   const getUserName = () => {
-    return fetch('http://localhost:9999/userinfo', { credentials: "include" })
-      .then(r => {
-        if (r.ok) {
-          return r.json();
-        } else {
-          setLoggedIn(false);
-          setUserName(undefined);
-          return { success: false };
-        }
-      }).then(r => {
-        if (r.success !== false) {
-          setLoggedIn(true);
-          setUserName(r.userName);
-        }
-      });
+    return fetch('http://localhost:9999/userinfo', { credentials: "include"})
+    .then(r => {
+      if(r.ok) {
+        return r.json();
+      } else {
+        setLoggedIn(false);
+        setUserName(undefined);
+        return { success: false };
+      }
+    }).then(r => {
+      if(r.success !== false) {
+        setLoggedIn(true);
+        setUserName(r.userName);
+      }
+    });
   }
 
   useEffect(() => {
@@ -40,13 +40,13 @@ function App() {
   };
 
   const logoutHandler = () => {
-    return fetch('http://localhost:9999/logout', { credentials: 'include' })
-      .then(r => {
-        if (r.ok) {
-          setLoggedIn(false);
-          setUserName(undefined);
-        }
-      })
+    return fetch('http://localhost:9999/logout', { credentials: 'include'})
+    .then(r => {
+      if(r.ok) {
+        setLoggedIn(false);
+        setUserName(undefined);
+      }
+    })
   };
 
 
@@ -57,17 +57,17 @@ function App() {
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include"
+      credentials:"include"
     })
       .then((r) => {
-        if (r.ok) {
+        if(r.ok) {
           return { success: true };
         } else {
           return r.json()
         }
       })
       .then((r) => {
-        if (r.success === true) {
+        if(r.success === true) {
           return getUserName();
         } else {
           setError(r.err);
@@ -75,14 +75,14 @@ function App() {
       });
   }
   return loggedIn ? (
-    <TodoList username={userName} logoutHandler={logoutHandler} />
+    <TodoList username={userName} logoutHandler={logoutHandler}/>
   ) : (
-      <LoginForm
-        signupHandler={signupHandler}
-        loginHandler={loginHandler}
-        error={error}
-      />
-    );
+    <LoginForm
+      signupHandler={signupHandler}
+      loginHandler={loginHandler}
+      error={error}
+    />
+  );
 }
 //App.listen(port, () => console.log(`App listening on port ${port}!`))
 export default App;
