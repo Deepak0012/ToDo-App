@@ -3,8 +3,10 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
 const session = require("express-session");
+var path = require("path");
 
 const session_secret = "newton";
+const PORT = process.env.PORT || 9999;
 
 const app = express();
 app.use(express.json()); // added body key to req
@@ -18,6 +20,8 @@ app.use(
     cookie: { maxAge: 1 * 60 * 60 * 1000 }
   })
 );
+app.use(express.static(path.join(__dirname, 'build')));
+
 
 const db = mongoose.createConnection("mongodb://localhost:27017/TodoApp", {
   useNewUrlParser: true,
@@ -38,7 +42,9 @@ const userModel = db.model("user", userSchema);
 const todoModel = db.model("todo", todoSchema);
 const isNullOrUndefined = (val) => val === null || val === undefined || val === '';
 const SALT = 5;
-
+app.get('/', (req,res) =>{
+  res.send('application is running on port: '+PORT);
+})
 app.post("/signup", async (req, res) => {
   const { userName, password } = req.body;
   // console.log( {userName, password });
@@ -159,4 +165,4 @@ app.get('/userinfo', AuthMiddleware, async (req, res) => {
   res.send({ userName: user.userName });
 });
 
-app.listen(9999);
+app.listen(PORT);
